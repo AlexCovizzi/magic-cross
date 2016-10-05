@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.duast.game.MyGame;
-import com.duast.game.stages.GameStage;
+import com.duast.game.cameras.GameCamera;
+import com.duast.game.entities.Squares;
+import com.duast.game.listeners.GameInputProcessor;
 import com.duast.game.utils.C;
 
 /**
@@ -14,15 +17,22 @@ import com.duast.game.utils.C;
 
 public class GameScreen implements Screen {
     private MyGame game;
-    private GameStage gameStage;
     private FPSLogger log;
+    private GameCamera camera;
+    private SpriteBatch batch;
+    private Squares squares;
+    private GameInputProcessor inputProcessor;
 
     public GameScreen(MyGame game) {
         this.game = game;
         log = new FPSLogger();
 
-        gameStage = new GameStage(this);
-        Gdx.input.setInputProcessor(gameStage);
+        camera = new GameCamera();
+        batch = new SpriteBatch();
+        squares = new Squares();
+
+        inputProcessor = new GameInputProcessor(this);
+        Gdx.input.setInputProcessor(inputProcessor);
     }
 
     @Override
@@ -36,11 +46,15 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(C.BACKGROUND.r, C.BACKGROUND.g, C.BACKGROUND.b, C.BACKGROUND.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //act
-        gameStage.act();
+        //update
+        camera.update();
+        squares.update(delta);
 
         //draw
-        gameStage.draw();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        squares.draw(batch);
+        batch.end();
 
         //fps logger
         //log.log();
@@ -48,7 +62,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        gameStage.getViewport().update(width, height);
+
     }
 
     @Override
@@ -68,10 +82,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        gameStage.dispose();
+        batch.dispose();
+        squares.dispose();
     }
 
-    public GameStage getGameStage() {
-        return gameStage;
+    /* getters */
+
+    public Squares getSquares() {
+        return squares;
+    }
+
+    public GameCamera getCamera() {
+        return camera;
     }
 }

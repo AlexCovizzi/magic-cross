@@ -1,5 +1,6 @@
 package com.duast.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,19 +18,15 @@ public class Square {
     public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - 8*C.DIST)/3;
 
     private Coordinates coords;
-    private Vector2 position;
     private Sprite sprite;
 
     public Square() {
         coords = new Coordinates();
-        position = new Vector2();
         initSprite();
     }
 
-    public void update() {
-        setPosition(C.PAD_LR+C.DIST+coords.x*(SIZE+3*C.DIST),
-                    C.PAD_DOWN+C.DIST+coords.y*(SIZE+3*C.DIST));
-        sprite.setPosition(position.x, position.y);
+    public void update(float delta) {
+
     }
 
     public void draw(SpriteBatch batch) {
@@ -47,16 +44,26 @@ public class Square {
         Texture texture = new Texture(pixmap);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite = new Sprite(texture);
+        sprite.setBounds(0, 0, SIZE, SIZE);
         pixmap.dispose();
     }
 
     /* setters */
+    public void setCoordinates(Coordinates coords) {
+        setCoordinates(coords.x, coords.y);
+    }
     public void setCoordinates(int x, int y) {
+        //keep coords between 0 and 8
+        if(x>8) x=x-9; if(x<0) x=x+9;
+        if(y>8) y=y-9; if(y<0) y=y+9;
+
         coords.set(x, y);
+        sprite.setPosition(C.PAD_LR+C.DIST+coords.x*(SIZE+3*C.DIST),
+                C.PAD_DOWN+C.DIST+coords.y*(SIZE+3*C.DIST));
     }
 
     public void setPosition(float x, float y) {
-        position.set(x, y);
+        sprite.setPosition(x, y);
     }
 
     public void setColor(Color color) {
@@ -69,7 +76,7 @@ public class Square {
     }
 
     public Vector2 getPosition() {
-        return position;
+        return new Vector2(sprite.getX(), sprite.getY());
     }
 
     public Color getColor() {
