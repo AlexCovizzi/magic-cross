@@ -17,11 +17,9 @@ import com.duast.game.utils.Coordinates;
 public class Square {
     public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - 8*C.DIST)/3;
 
-    private Coordinates coords;
     private Sprite sprite;
 
     public Square() {
-        coords = new Coordinates();
         initSprite();
     }
 
@@ -52,14 +50,10 @@ public class Square {
     public void setCoordinates(Coordinates coords) {
         setCoordinates(coords.x, coords.y);
     }
-    public void setCoordinates(int x, int y) {
-        //keep coords between 0 and 8
-        if(x>8) x=x-9; if(x<0) x=x+9;
-        if(y>8) y=y-9; if(y<0) y=y+9;
 
-        coords.set(x, y);
-        sprite.setPosition(C.PAD_LR+C.DIST+coords.x*(SIZE+3*C.DIST),
-                C.PAD_DOWN+C.DIST+coords.y*(SIZE+3*C.DIST));
+    public void setCoordinates(int x, int y) {
+        sprite.setPosition(C.PAD_LR+C.DIST+x*(SIZE+3*C.DIST),
+                C.PAD_DOWN+C.DIST+y*(SIZE+3*C.DIST));
     }
 
     public void setPosition(float x, float y) {
@@ -71,9 +65,6 @@ public class Square {
     }
 
     /* getters */
-    public Coordinates getCoordinates() {
-        return coords;
-    }
 
     public Vector2 getPosition() {
         return new Vector2(sprite.getX(), sprite.getY());

@@ -19,7 +19,6 @@ public class GameInputProcessor implements InputProcessor {
     private GameScreen screen;
     private float x0, y0;
     private Coordinates t_coords; //touch coordinates
-    private int[] row, column;
 
     public GameInputProcessor(GameScreen screen) {
         this.screen = screen;
@@ -35,10 +34,6 @@ public class GameInputProcessor implements InputProcessor {
         //transform touch position in coordinates
         t_coords.setX((int) ((x0-C.PAD_LR-8*C.DIST)/Square.SIZE));
         t_coords.setY((int) ((y0-C.PAD_DOWN-8*C.DIST)/Square.SIZE));
-
-        //get row and column with same coords as the touch
-        row = screen.getSquares().getLine(t_coords.y, Squares.ROW);
-        column = screen.getSquares().getLine(t_coords.x, Squares.COLUMN);
 
         return true;
     }
@@ -61,25 +56,13 @@ public class GameInputProcessor implements InputProcessor {
             this.y0=C.HEIGHT-screenY; //set new starting y
         } else { dy=0; }
 
-        if(dx != 0) {
-            for(int i=0; i<row.length; i++) {
-                if(row[i] != -1) {
-                    int new_coords_x = screen.getSquares().get(row[i]).getCoordinates().x + (int)dx;
-                    int new_coords_y = screen.getSquares().get(row[i]).getCoordinates().y;
-                    screen.getSquares().get(row[i]).setCoordinates(new_coords_x, new_coords_y);
-                }
-            }
+        if(dx!=0) {
+            screen.getSquares().move(t_coords.y, Squares.ROW, (int)dx);
+        }
+        if(dy!=0) {
+            screen.getSquares().move(t_coords.x, Squares.COLUMN, (int)dy);
         }
 
-        if(dy != 0) {
-            for(int i=0; i<column.length; i++) {
-                if(column[i] != -1) {
-                    int new_coords_x = screen.getSquares().get(column[i]).getCoordinates().x;
-                    int new_coords_y = screen.getSquares().get(column[i]).getCoordinates().y + (int)dy;
-                    screen.getSquares().get(column[i]).setCoordinates(new_coords_x, new_coords_y);
-                }
-            }
-        }
         return true;
     }
 
