@@ -36,12 +36,12 @@ public class GameInputProcessor implements InputProcessor {
         this.y0 = C.HEIGHT-screenY;
 
         //transform touch position in coordinates
-        t_coords.setX((int) ((x0-C.PAD_LR-8*C.DIST)/Square.SIZE));
-        t_coords.setY((int) ((y0-C.PAD_DOWN-8*C.DIST)/Square.SIZE));
+        t_coords.setX((int) ((x0-C.PAD_LR-(C.SS*C.SS-1)*C.DIST)/Square.SIZE));
+        t_coords.setY((int) ((y0-C.PAD_DOWN-(C.SS*C.SS-1)*C.DIST)/Square.SIZE));
 
         l = -1;
 
-        if(y0 > C.HEIGHT-64) shuffle(30);
+        if(y0 > C.HEIGHT-64) shuffle(10);
 
         return true;
     }

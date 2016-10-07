@@ -25,6 +25,6 @@ public class C {
 
     public static final int PAD_LR = C.WIDTH/40; //distance left and right
     public static final int PAD_DOWN = C.WIDTH/10; //distance down
-    public static final int DIST = C.WIDTH/400; //distance between squares
+    public static final int DIST = C.WIDTH/300; //distance between squares
 
 }
