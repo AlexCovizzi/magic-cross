@@ -10,12 +10,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
 
+import java.util.ArrayList;
+
 /**
  * Created by alex on 10/4/16.
  */
 
 public class Square {
-    public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - 8*C.DIST)/3;
+    public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (C.SS*C.SS-1)*C.DIST)/C.SS;
 
     private Sprite sprite;
 
@@ -52,8 +54,8 @@ public class Square {
     }
 
     public void setCoordinates(int x, int y) {
-        sprite.setPosition(C.PAD_LR+C.DIST+x*(SIZE+3*C.DIST),
-                C.PAD_DOWN+C.DIST+y*(SIZE+3*C.DIST));
+        sprite.setPosition(C.PAD_LR+C.DIST+x*(SIZE+C.SS*C.DIST),
+                C.PAD_DOWN+C.DIST+y*(SIZE+C.SS*C.DIST));
     }
 
     public void setPosition(float x, float y) {

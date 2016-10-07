@@ -10,6 +10,7 @@ import com.duast.game.cameras.GameCamera;
 import com.duast.game.entities.Squares;
 import com.duast.game.listeners.GameInputProcessor;
 import com.duast.game.utils.C;
+import com.duast.game.utils.SquareArray;
 
 /**
  * Created by alex on 9/22/16.
