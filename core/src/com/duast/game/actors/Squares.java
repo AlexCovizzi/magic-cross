@@ -1,23 +1,25 @@
-package com.duast.game.entities;
+package com.duast.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
-import com.duast.game.utils.SquareArray;
 
 /**
  * Created by alex on 9/25/16.
  */
 
 public class Squares{
+    private static final int SHUFFLE_ITERS = 20;
     private static final int[][] MATRIX = { {0, 1, 0},
                                             {2, 3, 4},
                                             {0, 5, 0}  };
 
     private SquareArray squares;
-    public Squares() {
+    private GameStage game;
+
+    public Squares(GameStage game) {
+        this.game = game;
         squares = new SquareArray();
         initSquares();
     }
@@ -40,6 +42,7 @@ public class Squares{
                                 case 4: square.setColor(C.GREEN); break;
                                 case 5: square.setColor(C.ORANGE); break;
                             }
+                            game.addActor(square);
                         }
                     }
                 }
@@ -47,37 +50,8 @@ public class Squares{
         }
     }
 
-    public void update(float delta) {
-        for(int i=0; i<SquareArray.SIZE; i++) {
-            for(int j=0; j<SquareArray.SIZE; j++) {
-                if(squares.get(i,j) != null) squares.get(i,j).update(delta);
-            }
-        }
-    }
-
-    public void draw(SpriteBatch batch) {
-        for(int i=0; i<SquareArray.SIZE; i++) {
-            for(int j=0; j<SquareArray.SIZE; j++) {
-                if(squares.get(i,j) != null) squares.get(i,j).draw(batch);
-            }
-        }
-    }
-
-    public void dispose() {
-        for(int i=0; i<SquareArray.SIZE; i++) {
-            for(int j=0; j<SquareArray.SIZE; j++) {
-                if(squares.get(i,j) != null) squares.get(i,j).dispose();
-            }
-        }
-    }
-
     public boolean move(Coordinates coords, int m, int l) {
         return squares.move(coords, m, l);
-    }
-
-    /* getters */
-    public Square get(int x, int y) {
-        return squares.get(x, y);
     }
 
     public boolean checkWin() {
@@ -100,6 +74,28 @@ public class Squares{
             }
         }
         return true;
+    }
+
+    public void shuffle() {
+        for(int i=0;i<SHUFFLE_ITERS;i++) {
+            int line = randomWithRange(0, 1); //row=0, column=1
+            int line_n = randomWithRange(C.SS, C.SS*2-1);
+            int move = randomWithRange(1, SquareArray.SIZE-1);
+
+            for(int j=0; j<move; j++) {
+                move(new Coordinates(line_n, line_n), 1, line);
+            }
+        }
+    }
+
+    int randomWithRange(int min, int max) {
+        int range = (max - min) + 1;
+        return (int)(Math.random() * range) + min;
+    }
+
+    /* getters */
+    public Square get(int x, int y) {
+        return squares.get(x, y);
     }
 
 }

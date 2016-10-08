@@ -3,10 +3,10 @@ package com.duast.game;
 import com.badlogic.gdx.Game;
 import com.duast.game.screens.GameScreen;
 
-public class MyGame extends Game
+public class Main extends Game
 {
 	public static final String VERSION = "0.0.1";
-	public static final String LOG = "MyGame";
+	public static final String LOG = "Main";
 
 	@Override
 	public void create () {

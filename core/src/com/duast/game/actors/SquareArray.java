@@ -1,6 +1,7 @@
-package com.duast.game.utils;
+package com.duast.game.actors;
 
-import com.duast.game.entities.Square;
+import com.duast.game.utils.C;
+import com.duast.game.utils.Coordinates;
 
 /**
  * Created by alex on 10/7/16.

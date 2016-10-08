@@ -1,22 +1,20 @@
-package com.duast.game.entities;
+package com.duast.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
 
-import java.util.ArrayList;
-
 /**
- * Created by alex on 10/4/16.
+ * Created by alex on 10/8/16.
  */
 
-public class Square {
+public class Square extends Actor {
     public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (C.SS-1)*C.DIST)/C.SS;
 
     private Sprite sprite;
@@ -25,16 +23,19 @@ public class Square {
         initSprite();
     }
 
-    public void update(float delta) {
+    @Override
+    public void act(float delta) {
+        super.act(delta);
 
+        sprite.setPosition(getX(), getY());
+        sprite.setColor(getColor());
     }
 
-    public void draw(SpriteBatch batch) {
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
         sprite.draw(batch);
-    }
-
-    public void dispose() {
-        sprite.getTexture().dispose();
     }
 
     private void initSprite() {
@@ -54,25 +55,12 @@ public class Square {
     }
 
     public void setCoordinates(int x, int y) {
-        sprite.setPosition(C.PAD_LR+x*(SIZE+C.DIST),
+        setPosition(C.PAD_LR+x*(SIZE+C.DIST),
                 C.PAD_DOWN+y*(SIZE+C.DIST));
     }
 
-    public void setPosition(float x, float y) {
-        sprite.setPosition(x, y);
-    }
-
-    public void setColor(Color color) {
-        sprite.setColor(color);
-    }
-
     /* getters */
-
     public Vector2 getPosition() {
-        return new Vector2(sprite.getX(), sprite.getY());
-    }
-
-    public Color getColor() {
-        return sprite.getColor();
+        return new Vector2(getX(), getY());
     }
 }

@@ -1,39 +1,40 @@
 package com.duast.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.duast.game.MyGame;
+import com.duast.game.Main;
 import com.duast.game.cameras.GameCamera;
-import com.duast.game.entities.Squares;
-import com.duast.game.listeners.GameInputProcessor;
+import com.duast.game.stages.GameStage;
+import com.duast.game.stages.HudStage;
 import com.duast.game.utils.C;
-import com.duast.game.utils.SquareArray;
 
 /**
  * Created by alex on 9/22/16.
  */
 
 public class GameScreen implements Screen {
-    private MyGame game;
+    private Main main;
     private FPSLogger log;
     private GameCamera camera;
-    private SpriteBatch batch;
-    private Squares squares;
-    private GameInputProcessor inputProcessor;
+    private GameStage game;
+    private HudStage hud;
 
-    public GameScreen(MyGame game) {
-        this.game = game;
+    public GameScreen(Main main) {
+        this.main = main;
         log = new FPSLogger();
 
         camera = new GameCamera();
-        batch = new SpriteBatch();
-        squares = new Squares();
 
-        inputProcessor = new GameInputProcessor(this);
-        Gdx.input.setInputProcessor(inputProcessor);
+        hud = new HudStage(this);
+        game = new GameStage(this);
+
+        InputMultiplexer im = new InputMultiplexer();
+        im.addProcessor(hud);
+        im.addProcessor(game);
+        Gdx.input.setInputProcessor(im);
     }
 
     @Override
@@ -49,13 +50,12 @@ public class GameScreen implements Screen {
 
         //update
         camera.update();
-        squares.update(delta);
+        hud.act();
+        game.act();
 
         //draw
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        squares.draw(batch);
-        batch.end();
+        hud.draw();
+        game.draw();
 
         //fps logger
         //log.log();
@@ -63,7 +63,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        hud.getViewport().update(width, height, true);
+        game.getViewport().update(width, height, true);
     }
 
     @Override
@@ -83,17 +84,20 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        squares.dispose();
+        hud.dispose();
+        game.dispose();
     }
 
     /* getters */
-
-    public Squares getSquares() {
-        return squares;
-    }
-
     public GameCamera getCamera() {
         return camera;
+    }
+
+    public HudStage getHud() {
+        return hud;
+    }
+
+    public GameStage getGame() {
+        return game;
     }
 }
