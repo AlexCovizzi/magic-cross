@@ -3,7 +3,7 @@ package com.duast.game.listeners;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.duast.game.entities.Square;
+import com.duast.game.actors.Square;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
