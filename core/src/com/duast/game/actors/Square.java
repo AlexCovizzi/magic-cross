@@ -15,11 +15,12 @@ import com.duast.game.utils.Coordinates;
  */
 
 public class Square extends Actor {
-    public static final int SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (C.SS-1)*C.DIST)/C.SS;
+    public static int SIZE;
 
     private Sprite sprite;
 
     public Square() {
+        SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (C.SS-1)*C.DIST)/C.SS;
         initSprite();
     }
 

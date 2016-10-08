@@ -28,6 +28,14 @@ public class GameStage extends Stage {
         squares = new Squares(this);
     }
 
+    public void reset() {
+        if(squares != null) {
+            clear();
+            addListener(new GameInputListener(this));
+            squares.initSquares();
+        }
+    }
+
     @Override
     public void act() {
         super.act();

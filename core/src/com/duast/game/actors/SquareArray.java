@@ -8,14 +8,13 @@ import com.duast.game.utils.Coordinates;
  */
 
 public class SquareArray {
-    public static final int SIZE = C.SS*3; // SIZE X SIZE
     public static final int ROW = 0;
     public static final int COLUMN = 1;
 
     private Square[][] arr;
 
     public SquareArray() {
-        arr = new Square[SIZE][SIZE];
+        arr = new Square[C.SS*3][C.SS*3];
     }
 
     public void set(int x, int y, Square square) {
@@ -54,7 +53,7 @@ public class SquareArray {
             for(int j=0; j<arr.length; j++) {
                 int h=k-j*m;
                 int pos = h-m;
-                if(pos<0) pos=SIZE-1; if(pos>SIZE-1) pos=0;
+                if(pos<0) pos=C.SS*3-1; if(pos>C.SS*3-1) pos=0;
 
                 if(l==ROW) x = h;
                 else if(l==COLUMN) y = h;

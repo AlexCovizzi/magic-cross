@@ -20,7 +20,7 @@ public class C {
     public static final Color ORANGE = Color.ORANGE;
     public static final Color VIOLET = Color.VIOLET;
 
-    public static final int SS = 2; //squares in a section;
+    public static int SS = 1; //squares in a section;
 
 
     public static final int PAD_LR = C.WIDTH/40; //distance left and right

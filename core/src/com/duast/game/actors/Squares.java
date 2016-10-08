@@ -20,11 +20,11 @@ public class Squares{
 
     public Squares(GameStage game) {
         this.game = game;
-        squares = new SquareArray();
         initSquares();
     }
 
     public void initSquares() {
+        squares = new SquareArray();
         //every number >0 in MATRIX represent a section of 9 squares with the same color
         for(int i=0; i<MATRIX.length; i++) {
             for(int j=0; j<MATRIX[i].length; j++) {
@@ -80,7 +80,7 @@ public class Squares{
         for(int i=0;i<SHUFFLE_ITERS;i++) {
             int line = randomWithRange(0, 1); //row=0, column=1
             int line_n = randomWithRange(C.SS, C.SS*2-1);
-            int move = randomWithRange(1, SquareArray.SIZE-1);
+            int move = randomWithRange(1, C.SS*3-1);
 
             for(int j=0; j<move; j++) {
                 move(new Coordinates(line_n, line_n), 1, line);
