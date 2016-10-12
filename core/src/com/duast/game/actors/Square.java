@@ -1,12 +1,14 @@
 package com.duast.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
 
@@ -17,37 +19,31 @@ import com.duast.game.utils.Coordinates;
 public class Square extends Actor {
     public static int SIZE;
 
-    private Sprite sprite;
+    private NinePatchDrawable npd;
 
     public Square() {
         SIZE = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (C.SS-1)*C.DIST)/C.SS;
         initSprite();
     }
 
+    private void initSprite() {
+        Texture texture = new Texture("rect.png");
+        NinePatch np = new NinePatch(texture, 24, 24, 24, 24);
+        npd = new NinePatchDrawable(np);
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        sprite.setPosition(getX(), getY());
-        sprite.setColor(getColor());
+        npd = npd.tint(getColor());
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        sprite.draw(batch);
-    }
-
-    private void initSprite() {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        Texture texture = new Texture(pixmap);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        sprite = new Sprite(texture);
-        sprite.setBounds(0, 0, SIZE, SIZE);
-        pixmap.dispose();
+        npd.draw(batch, getX()-SIZE*(getScaleX()-1)/2, getY()-SIZE*(getScaleY()-1)/2, SIZE*getScaleX(), SIZE*getScaleY());
     }
 
     /* setters */
@@ -58,6 +54,12 @@ public class Square extends Actor {
     public void setCoordinates(int x, int y) {
         setPosition(C.PAD_LR+x*(SIZE+C.DIST),
                 C.PAD_DOWN+y*(SIZE+C.DIST));
+    }
+
+    @Override
+    public void setColor(Color color) {
+        super.setColor(color);
+        npd = npd.tint(getColor());
     }
 
     /* getters */

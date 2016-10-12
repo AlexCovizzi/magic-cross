@@ -23,19 +23,13 @@ import com.duast.game.utils.C;
  * Created by Alex on 16/02/2016.
  */
 public class HudStage extends Stage {
-    private static final int TABLE_SIZE = C.WIDTH / 10;
-    private static final int FONT_SIZE = C.WIDTH / 20;
-    private static final int LABEL_SIZE = C.WIDTH / 50;
-    private static final int N_SIZE = C.WIDTH / 28;
     private static final int PAD = C.WIDTH / 40;
     private static final int WIDTH = C.WIDTH / 8;
     private static final int HEIGHT = C.HEIGHT / 24;
-    private static final int PAD_TOP = PAD + (PAD + LABEL_SIZE + N_SIZE - HEIGHT) / 2;
-    private static final Color COL = Color.GRAY;
+    private static final float FONT_SCALE = C.WIDTH/1536f;
 
     private GameScreen screen;
-    private Label time;
-    private TextButton menu, shuffle, n_sq;
+    private TextButton menu, shuffle, n_sq, time;
     private float cs=0;
     private int s=0, m=0;
 
@@ -45,37 +39,18 @@ public class HudStage extends Stage {
         setViewport(new FillViewport(C.WIDTH, C.HEIGHT, screen.getCamera()));
 
         Skin skin = new Skin(Gdx.files.internal("skin.json"));
+        for(int i=0; i<skin.getFont("default").getRegions().size; i++) {
+            skin.getFont("default").getRegions().get(i).getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
 
         Table table = new Table();
         table.top().right();
         table.setFillParent(true);
 
-        /*Texture tMenu = new Texture("menu.png");
-        tMenu.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        skin.add("menu", tMenu);
-
-        Texture tShuffle = new Texture("shuffle.png");
-        tShuffle.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        skin.add("shuffle", tShuffle);
-
-        menu = new ImageButton(new ImageButton.ImageButtonStyle(skin.newDrawable("menu", COL), skin.newDrawable("menu", COL),skin.newDrawable("menu", COL),skin.newDrawable("menu", COL),skin.newDrawable("menu", COL),skin.newDrawable("menu", COL)));
-        menu.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //
-            }
-        });
-
-        shuffle = new ImageButton(new ImageButton.ImageButtonStyle(skin.newDrawable("shuffle", COL), skin.newDrawable("shuffle", COL),skin.newDrawable("shuffle", COL),skin.newDrawable("shuffle", COL),skin.newDrawable("shuffle", COL),skin.newDrawable("shuffle", COL)));
-        shuffle.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                screen.getGame().getSquares().shuffle();
-            }
-        });*/
-
         menu = new TextButton("Menu", skin, "default");
+        menu.getLabel().setFontScale(FONT_SCALE);
         shuffle = new TextButton("Shuffle", skin, "default");
+        shuffle.getLabel().setFontScale(FONT_SCALE);
         shuffle.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -84,22 +59,24 @@ public class HudStage extends Stage {
             }
         });
         n_sq = new TextButton(""+C.SS, skin, "default");
+        n_sq.getLabel().setFontScale(FONT_SCALE);
         n_sq.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 C.SS+=1;
-                if(C.SS == 7) C.SS = 1;
+                if(C.SS == 5) C.SS = 2;
                 screen.getGame().reset();
                 cs=0; s=0; m=0;
-                time.setText(m+":"+s+":"+(int)cs);
+                time.setText(toStr(m)+":"+toStr(s)+":"+toStr((int)cs));
             }
         });
-        time = new Label(m+":"+s+":"+cs, skin, "default", Color.DARK_GRAY);
+        time = new TextButton(toStr(m)+":"+toStr(s)+":"+toStr((int)cs), skin, "label");
+        time.getLabel().setFontScale(FONT_SCALE);
 
-        table.add(time).size(WIDTH, HEIGHT).pad(PAD_TOP, PAD, PAD, PAD);
-        table.add(n_sq).size(WIDTH, HEIGHT).pad(PAD_TOP, PAD, PAD, PAD);
-        table.add(shuffle).size(WIDTH, HEIGHT).pad(PAD_TOP, PAD, PAD, PAD);
-        table.add(menu).size(WIDTH, HEIGHT).pad(PAD_TOP, PAD, PAD, PAD);
+        table.add(time).size(WIDTH*1.2f, HEIGHT).pad(PAD, PAD/2, PAD, PAD/2);
+        table.add(n_sq).size(WIDTH, HEIGHT).pad(PAD, PAD/2, PAD, PAD/2);
+        table.add(shuffle).size(WIDTH, HEIGHT).pad(PAD, PAD/2, PAD, PAD/2);
+        table.add(menu).size(WIDTH, HEIGHT).pad(PAD, PAD/2, PAD, PAD);
 
         addActor(table);
     }
@@ -119,9 +96,15 @@ public class HudStage extends Stage {
                 s=0;
             }
 
-            time.setText(m+":"+s+":"+(int)cs);
+            time.setText(toStr(m)+":"+toStr(s)+":"+toStr((int)cs));
         }
         n_sq.setText(""+C.SS);
+    }
+
+    private String toStr(int i) {
+        String s = ""+i;
+        if(i<10) s = "0"+i;
+        return s;
     }
 
     @Override

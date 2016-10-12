@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         //Clear the screen
-        Gdx.gl.glClearColor(C.BACKGROUND.r, C.BACKGROUND.g, C.BACKGROUND.b, C.BACKGROUND.a);
+        Gdx.gl.glClearColor(C.BACKGROUND_DARK.r, C.BACKGROUND_DARK.g, C.BACKGROUND_DARK.b, C.BACKGROUND_DARK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //update

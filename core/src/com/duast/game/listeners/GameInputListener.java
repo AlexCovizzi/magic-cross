@@ -33,8 +33,8 @@ public class GameInputListener extends InputListener {
         this.y0 = y;
 
         //transform touch position in coordinates
-        t_coords.setX((int) ((x0-C.PAD_LR-(C.SS*C.SS-1)*C.DIST)/ Square.SIZE));
-        t_coords.setY((int) ((y0-C.PAD_DOWN-(C.SS*C.SS-1)*C.DIST)/Square.SIZE));
+        t_coords.setX((int) ((x0-C.PAD_LR-(C.SS*3-1)*C.DIST)/ Square.SIZE));
+        t_coords.setY((int) ((y0-C.PAD_DOWN-(C.SS*3-1)*C.DIST)/Square.SIZE));
 
         l = -1;
 

@@ -1,6 +1,8 @@
 package com.duast.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Align;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
@@ -32,6 +34,7 @@ public class Squares{
                     for(int k=0; k<C.SS; k++) {
                         for(int l=0; l<C.SS; l++) {
                             Square square = new Square();
+                            square.setOrigin(Align.center);
                             int x = i*C.SS+k;
                             int y = j*C.SS+l;
                             squares.set(x, y, square);
@@ -40,9 +43,12 @@ public class Squares{
                                 case 2: square.setColor(C.VIOLET); break;
                                 case 3: square.setColor(C.BLUE); break;
                                 case 4: square.setColor(C.GREEN); break;
-                                case 5: square.setColor(C.ORANGE); break;
+                                case 5: square.setColor(C.YELLOW); break;
                             }
                             game.addActor(square);
+                            /*square.addAction(Actions.parallel(
+                                    Actions.sequence(Actions.scaleTo(2,2), Actions.scaleTo(1, 1, 0.5f)),
+                                    Actions.sequence(Actions.alpha(0), Actions.alpha(1, 0.5f))));*/
                         }
                     }
                 }
