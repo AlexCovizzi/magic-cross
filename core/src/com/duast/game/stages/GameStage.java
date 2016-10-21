@@ -1,9 +1,11 @@
 package com.duast.game.stages;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.duast.game.actors.Highlights;
 import com.duast.game.actors.Squares;
 import com.duast.game.listeners.GameInputListener;
 import com.duast.game.screens.GameScreen;
@@ -16,7 +18,9 @@ import com.duast.game.utils.C;
 public class GameStage extends Stage {
 
     private GameScreen screen;
+    private int squares_in_sector = 2; //number of squares in a sector
     private Squares squares;
+    private Highlights highlights;
 
     public GameStage(GameScreen screen) {
         this.screen = screen;
@@ -25,14 +29,16 @@ public class GameStage extends Stage {
 
         addListener(new GameInputListener(this));
 
+        highlights = new Highlights(this, screen.getBackgroundColor());
+
         squares = new Squares(this);
+
     }
 
     public void reset() {
         if(squares != null) {
             clear();
             addListener(new GameInputListener(this));
-            squares.initSquares();
         }
     }
 
@@ -53,5 +59,13 @@ public class GameStage extends Stage {
 
     public Squares getSquares() {
         return squares;
+    }
+
+    public Highlights getHighlights() {
+        return highlights;
+    }
+
+    public int getNumSquaresInSector() {
+        return squares_in_sector;
     }
 }

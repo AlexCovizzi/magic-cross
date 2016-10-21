@@ -3,9 +3,8 @@ package com.duast.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.duast.game.Main;
 import com.duast.game.cameras.GameCamera;
 import com.duast.game.stages.GameStage;
 import com.duast.game.stages.HudStage;
@@ -16,18 +15,15 @@ import com.duast.game.utils.C;
  */
 
 public class GameScreen implements Screen {
-    private Main main;
-    private FPSLogger log;
+
     private GameCamera camera;
     private GameStage game;
     private HudStage hud;
+    private Color background_color = C.BACKGROUND_DARK;
 
-    public GameScreen(Main main) {
-        this.main = main;
-        log = new FPSLogger();
+    public GameScreen() {
 
         camera = new GameCamera();
-
         hud = new HudStage(this);
         game = new GameStage(this);
 
@@ -45,7 +41,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         //Clear the screen
-        Gdx.gl.glClearColor(C.BACKGROUND_DARK.r, C.BACKGROUND_DARK.g, C.BACKGROUND_DARK.b, C.BACKGROUND_DARK.a);
+        Gdx.gl.glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //update
@@ -56,9 +52,6 @@ public class GameScreen implements Screen {
         //draw
         hud.draw();
         game.draw();
-
-        //fps logger
-        //log.log();
     }
 
     @Override
@@ -69,12 +62,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        //save game state on Android
     }
 
     @Override
     public void resume() {
-
+        //resume saved game state on Android
     }
 
     @Override
@@ -91,6 +84,10 @@ public class GameScreen implements Screen {
     /* getters */
     public GameCamera getCamera() {
         return camera;
+    }
+
+    public Color getBackgroundColor() {
+        return background_color;
     }
 
     public HudStage getHud() {

@@ -25,8 +25,8 @@ import com.duast.game.utils.C;
 public class HudStage extends Stage {
     private static final int PAD = C.WIDTH / 40;
     private static final int WIDTH = C.WIDTH / 8;
-    private static final int HEIGHT = C.HEIGHT / 24;
-    private static final float FONT_SCALE = C.WIDTH/1536f;
+    private static final int HEIGHT = C.HEIGHT / 20;
+    private static final float FONT_SCALE = C.WIDTH/1344f;
 
     private GameScreen screen;
     private TextButton menu, shuffle, n_sq, time;
