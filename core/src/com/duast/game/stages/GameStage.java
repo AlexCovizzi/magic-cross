@@ -27,19 +27,16 @@ public class GameStage extends Stage {
 
         setViewport(new FillViewport(C.WIDTH, C.HEIGHT, screen.getCamera()));
 
-        addListener(new GameInputListener(this));
-
-        highlights = new Highlights(this, screen.getBackgroundColor());
-
-        squares = new Squares(this);
-
+        init();
     }
 
-    public void reset() {
-        if(squares != null) {
+    public void init() {
+        if(getActors().size!=0) {
             clear();
-            addListener(new GameInputListener(this));
         }
+        highlights = new Highlights(this, screen.getTheme().getHighlightColor());
+        squares = new Squares(this);
+        addListener(new GameInputListener(this));
     }
 
     @Override
@@ -55,6 +52,10 @@ public class GameStage extends Stage {
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    public void setNumSquaresInSector(int n) {
+        squares_in_sector = n;
     }
 
     public Squares getSquares() {

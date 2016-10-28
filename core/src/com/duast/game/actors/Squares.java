@@ -23,17 +23,17 @@ public class Squares{
 
     public Squares(GameStage game) {
         this.game = game;
-        int z = 2;
 
-        squares = new SquareArray();
+        int ss = game.getNumSquaresInSector();
+        squares = new SquareArray(ss);
         for(int i=0; i<MATRIX_SIZE; i++) {
             for(int j=0; j<MATRIX_SIZE; j++) {
                 if(MATRIX[i][j] > 0) {
-                    for(int k=0; k<C.SS; k++) {
-                        for(int l=0; l<C.SS; l++) {
+                    for(int k=0; k<ss; k++) {
+                        for(int l=0; l<ss; l++) {
                             Square square = new Square();
-                            int x = i*C.SS+k;
-                            int y = j*C.SS+l;
+                            int x = i*ss+k;
+                            int y = j*ss+l;
                             switch(MATRIX[i][j]) {
                                 case 1: square.setColor(C.RED); break;
                                 case 2: square.setColor(C.VIOLET); break;
@@ -41,7 +41,7 @@ public class Squares{
                                 case 4: square.setColor(C.GREEN); break;
                                 case 5: square.setColor(C.YELLOW); break;
                             }
-                            int size = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (game.getNumSquaresInSector()-1)*C.DIST)/game.getNumSquaresInSector();
+                            int size = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (ss-1)*C.DIST)/ss;
                             square.setSize(size,size);
                             squares.set(x, y, square);
                             game.addActor(square);
@@ -58,9 +58,10 @@ public class Squares{
      * line -> ROW(0) or COLUMN(1)
      */
     public void move(int line_n, int dir, int line) {
+        int ss = game.getNumSquaresInSector();
         int x=0, y=0;
         int k=0;
-        if(dir==1) k=C.SS*3-1;
+        if(dir==1) k=ss*3-1;
 
         if(line== ROW) {
             x = k;
@@ -72,15 +73,15 @@ public class Squares{
         }
 
         Square aux = get(x, y); //store in a variable the first square of the row;
-        for(int j=0; j<C.SS*3; j++) {
+        for(int j=0; j<ss*3; j++) {
             int h = k - j*dir;
             int pos = h - dir;
-            if(pos<0) pos=C.SS*3-1; if(pos>C.SS*3-1) pos=0;
+            if(pos<0) pos=ss*3-1; if(pos>ss*3-1) pos=0;
 
             if(line== ROW) x = h;
             if(line==COLUMN) y = h;
 
-            if(j==C.SS*3-1) {
+            if(j==ss*3-1) {
                 squares.set(x, y, aux);
             }else{
                 if(line==ROW) squares.set(x, y, squares.get(pos, y));
@@ -90,10 +91,11 @@ public class Squares{
     }
 
     public void shuffle() {
+        int ss = game.getNumSquaresInSector();
         for(int i=0;i<ITERS;i++) {
             int line = randomWithRange(C.ROW, C.COLUMN); //random row or column
-            int line_n = randomWithRange(C.SS, C.SS*2-1); //random line in the central sector
-            int move = randomWithRange(1, C.SS*3-1); //random number of shifts
+            int line_n = randomWithRange(ss, ss*2-1); //random line in the central sector
+            int move = randomWithRange(1, ss*3-1); //random number of shifts
 
             for(int j=0; j<move; j++) {
                 move(line_n, 1, line);
@@ -107,14 +109,15 @@ public class Squares{
     }
 
     public boolean checkWin() {
+        int ss = game.getNumSquaresInSector();
         for(int i=0; i<MATRIX_SIZE; i++) {
             for(int j=0; j<MATRIX_SIZE; j++) {
                 if(MATRIX[i][j] > 0) {
                     Color color = null;
-                    for(int k=0; k<C.SS; k++) {
-                        for(int l=0; l<C.SS; l++) {
-                            int x = i*C.SS+k;
-                            int y = j*C.SS+l;
+                    for(int k=0; k<ss; k++) {
+                        for(int l=0; l<ss; l++) {
+                            int x = i*ss+k;
+                            int y = j*ss+l;
                             if(color!=null) {
                                 if(!color.equals(get(x,y).getColor())) return false;
                             } else {
@@ -128,13 +131,13 @@ public class Squares{
         return true;
     }
 
-
     /* getters */
     public Square get(int x, int y) {
         return squares.get(x, y);
     }
 
     public float getSquareSize() {
-        return get(C.SS, C.SS).getWidth();
+        int ss = game.getNumSquaresInSector();
+        return ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (ss-1)*C.DIST)/ss;
     }
 }

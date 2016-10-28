@@ -20,18 +20,18 @@ public class GameInputListener extends InputListener {
     public GameInputListener(GameStage game) {
         this.game = game;
         t_coords = new Coordinates();
+
     }
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-
         //set starting position
         this.x0 = x;
         this.y0 = y;
 
         //transform touch position in coordinates
-        t_coords.setX((int) ((x0-C.PAD_LR-(C.SS*3-1)*C.DIST)/game.getSquares().getSquareSize()));
-        t_coords.setY((int) ((y0-C.PAD_DOWN-(C.SS*3-1)*C.DIST)/game.getSquares().getSquareSize()));
+        t_coords.setX((int) ((x0-C.PAD_LR-(game.getNumSquaresInSector()*3-1)*C.DIST)/(int) game.getSquares().getSquareSize()));
+        t_coords.setY((int) ((y0-C.PAD_DOWN-(game.getNumSquaresInSector()*3-1)*C.DIST)/(int) game.getSquares().getSquareSize()));
 
         line = -1;
 
@@ -72,7 +72,7 @@ public class GameInputListener extends InputListener {
             }
         }
 
-        if(coord>C.SS-1 && coord<C.SS*2 && dir!=0) game.getSquares().move(coord, dir, line);
+        if(coord>game.getNumSquaresInSector()-1 && coord<game.getNumSquaresInSector()*2 && dir!=0) game.getSquares().move(coord, dir, line);
 
     }
 

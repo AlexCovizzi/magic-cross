@@ -10,8 +10,8 @@ import com.duast.game.utils.Coordinates;
 public class SquareArray {
     private Square[][] arr;
 
-    public SquareArray() {
-        arr = new Square[C.SS*3][C.SS*3];
+    public SquareArray(int squares_in_sector) {
+        arr = new Square[squares_in_sector*3][squares_in_sector*3];
     }
 
     public void set(int x, int y, Square square) {

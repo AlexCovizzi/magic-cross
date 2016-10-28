@@ -1,6 +1,5 @@
 package com.duast.game.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 

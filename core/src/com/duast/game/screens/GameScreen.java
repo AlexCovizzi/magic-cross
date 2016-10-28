@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.duast.game.cameras.GameCamera;
 import com.duast.game.stages.GameStage;
 import com.duast.game.stages.HudStage;
-import com.duast.game.utils.C;
+import com.duast.game.utils.Theme;
 
 /**
  * Created by alex on 9/22/16.
@@ -16,16 +16,16 @@ import com.duast.game.utils.C;
 
 public class GameScreen implements Screen {
 
+    private Theme theme;
     private GameCamera camera;
     private GameStage game;
     private HudStage hud;
-    private Color background_color = C.BACKGROUND_DARK;
 
     public GameScreen() {
-
+        theme = new Theme();
         camera = new GameCamera();
-        hud = new HudStage(this);
         game = new GameStage(this);
+        hud = new HudStage(this);
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(hud);
@@ -41,23 +41,24 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         //Clear the screen
-        Gdx.gl.glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
+        Color bc = theme.getBackgroundColor();
+        Gdx.gl.glClearColor(bc.r, bc.g, bc.b, bc.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //update
         camera.update();
-        hud.act();
         game.act();
+        hud.act();
 
         //draw
-        hud.draw();
         game.draw();
+        hud.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        hud.getViewport().update(width, height, true);
         game.getViewport().update(width, height, true);
+        hud.getViewport().update(width, height, true);
     }
 
     @Override
@@ -81,13 +82,19 @@ public class GameScreen implements Screen {
         game.dispose();
     }
 
-    /* getters */
-    public GameCamera getCamera() {
-        return camera;
+    /* setters */
+    public void setDark(boolean dark) {
+        theme.setDark(dark);
+        game.getHighlights().setColor(theme.getHighlightColor());
     }
 
-    public Color getBackgroundColor() {
-        return background_color;
+    /* getters */
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public GameCamera getCamera() {
+        return camera;
     }
 
     public HudStage getHud() {

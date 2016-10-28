@@ -40,15 +40,9 @@ public class Highlights {
         highlight_column.setSize(size_short, size_long);
     }
 
-    public void setColor(Color background) {
-        if(background==C.BACKGROUND_DARK) {
-            highlight_row.setColor(C.BACKGROUND_WHITE);
-            highlight_column.setColor(C.BACKGROUND_WHITE);
-        }
-        if(background==C.BACKGROUND_WHITE) {
-            highlight_row.setColor(C.BACKGROUND_DARK);
-            highlight_column.setColor(C.BACKGROUND_DARK);
-        }
+    public void setColor(Color color) {
+        highlight_row.setColor(color);
+        highlight_column.setColor(color);
     }
 
     public void setCoords(Coordinates coords) {
