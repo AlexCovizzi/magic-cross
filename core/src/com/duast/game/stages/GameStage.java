@@ -2,13 +2,16 @@ package com.duast.game.stages;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.duast.game.actors.Cross;
 import com.duast.game.actors.Highlights;
-import com.duast.game.actors.Squares;
+import com.duast.game.cameras.GameCamera;
 import com.duast.game.listeners.GameInputListener;
 import com.duast.game.screens.GameScreen;
+import com.duast.game.utils.Assets;
 import com.duast.game.utils.C;
 
 /**
@@ -16,32 +19,54 @@ import com.duast.game.utils.C;
  */
 
 public class GameStage extends Stage {
-
     private GameScreen screen;
-    private int squares_in_sector = 2; //number of squares in a sector
-    private Squares squares;
+    private GameCamera camera;
+    private Cross cross;
     private Highlights highlights;
+    private int diff;
 
     public GameStage(GameScreen screen) {
         this.screen = screen;
 
-        setViewport(new FillViewport(C.WIDTH, C.HEIGHT, screen.getCamera()));
+        camera = new GameCamera();
+        setViewport(new FitViewport(C.WIDTH, C.HEIGHT, camera));
 
-        init();
+        setDifficulty(Assets.SAVE_FILE.getDifficulty());
+
+        highlights = new Highlights(this);
+        cross = new Cross(this);
+
+        init(Assets.SAVE_FILE.getCross());
     }
 
-    public void init() {
-        if(getActors().size!=0) {
-            clear();
+    public void init(int[][] arr) {
+        if(screen.getUiStage() != null) screen.getUiStage().getTimer().reset();
+        clear();
+        highlights.init();
+        highlights.setTheme(screen.getTheme());
+        if(arr == null) {
+            cross.init(diff);
+            //cross.shuffle();
+        }else{
+            cross.init(arr);
         }
-        highlights = new Highlights(this, screen.getTheme().getHighlightColor());
-        squares = new Squares(this);
-        addListener(new GameInputListener(this));
+
+        String text;
+        if(arr != null) text = "Resumed last game";
+        else text = "Started new game";
+        Label label = new Label(text, new Label.LabelStyle(Assets.FONT_SMALL, C.GRAY));
+        label.setPosition(C.WIDTH/2 - label.getWidth()/2, C.PAD_DOWN + (cross.getSquareSize()+C.DIST)*cross.size() + C.PAD_LR*4);
+        addActor(label);
+        label.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1f, 0.75f), Actions.delay(2f), Actions.alpha(0, 0.75f)));
+
+        GameInputListener listener = new GameInputListener(screen); addListener(listener);
     }
 
     @Override
     public void act() {
         super.act();
+
+        camera.update();
     }
 
     @Override
@@ -54,19 +79,19 @@ public class GameStage extends Stage {
         super.dispose();
     }
 
-    public void setNumSquaresInSector(int n) {
-        squares_in_sector = n;
+    public void setDifficulty(int diff) {
+        this.diff = diff;
     }
 
-    public Squares getSquares() {
-        return squares;
+    public Cross getCross() {
+        return cross;
     }
 
     public Highlights getHighlights() {
         return highlights;
     }
 
-    public int getNumSquaresInSector() {
-        return squares_in_sector;
+    public int getDifficulty() {
+        return diff;
     }
 }

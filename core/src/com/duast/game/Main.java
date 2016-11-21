@@ -2,6 +2,7 @@ package com.duast.game;
 
 import com.badlogic.gdx.Game;
 import com.duast.game.screens.GameScreen;
+import com.duast.game.utils.Assets;
 
 public class Main extends Game
 {
@@ -10,6 +11,7 @@ public class Main extends Game
 
 	@Override
 	public void create () {
+		Assets.load();
 		setScreen(new GameScreen());
 	}
 

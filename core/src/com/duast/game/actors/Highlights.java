@@ -1,6 +1,7 @@
 package com.duast.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.duast.game.screens.GameScreen;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
@@ -11,45 +12,47 @@ import com.duast.game.utils.Coordinates;
 
 public class Highlights {
 
-    private GameStage game;
+    private GameStage stage;
     private Highlight highlight_row;
     private Highlight highlight_column;
 
-    public Highlights(GameStage game, Color background) {
-        this.game = game;
+    public Highlights(GameStage stage) {
+        this.stage = stage;
+    }
 
-        highlight_row = new Highlight(game);
+    public void init() {
+        highlight_row = new Highlight(stage);
         highlight_row.setLine(C.ROW);
-        highlight_column = new Highlight(game);
+        highlight_column = new Highlight(stage);
         highlight_column.setLine(C.COLUMN);
 
         setSize();
-        setColor(background);
 
-        game.addActor(highlight_row);
-        game.addActor(highlight_column);
+        stage.addActor(highlight_row);
+        stage.addActor(highlight_column);
 
         hide(C.ROW_COLUMN);
     }
 
     public void setSize() {
-        int square_size = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (game.getNumSquaresInSector()-1)*C.DIST)/game.getNumSquaresInSector();
-        int size_short = square_size+C.DIST*2;
-        int size_long = square_size*3*game.getNumSquaresInSector()+C.DIST*(game.getNumSquaresInSector()*3+1);
+        int ss = stage.getDifficulty()+2;
+        int square_size = ((C.WIDTH - 2*C.PAD_LR - 2*C.DIST)/3 - (ss-1)*C.DIST)/ss;
+        int size_short = square_size + 2*C.DIST;
+        int size_long = square_size*3*ss+C.DIST*(ss*3+1);
         highlight_row.setSize(size_long, size_short);
         highlight_column.setSize(size_short, size_long);
     }
 
-    public void setColor(Color color) {
-        highlight_row.setColor(color);
-        highlight_column.setColor(color);
+    public void setTheme(int theme) {
+        highlight_row.setTheme(theme);
+        highlight_column.setTheme(theme);
     }
 
     public void setCoords(Coordinates coords) {
-        int ss = game.getNumSquaresInSector();
-        if(coords.y>=ss && coords.y<=ss*2-1) highlight_row.setLineNumber(coords.y);
+        int sector_size = stage.getCross().size()/3;
+        if(coords.y>=sector_size && coords.y<=sector_size*2-1) highlight_row.setLineNumber(coords.y);
         else highlight_row.hide();
-        if(coords.x>=ss && coords.x<=ss*2-1) highlight_column.setLineNumber(coords.x);
+        if(coords.x>=sector_size && coords.x<=sector_size*2-1) highlight_column.setLineNumber(coords.x);
         else highlight_column.hide();
     }
 

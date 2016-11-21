@@ -1,5 +1,6 @@
 package com.duast.game.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 
@@ -24,8 +25,18 @@ public class Highlight extends MyActor {
     }
 
     public void setLineNumber(int line_n) {
-        if(line==ROW) setPosition(C.PAD_LR-C.DIST, game.getSquares().get(0, line_n).getY()-C.DIST);
-        if(line==COLUMN) setPosition(game.getSquares().get(line_n, 0).getX()-C.DIST, C.PAD_DOWN-C.DIST);
+        if(line==ROW) setPosition(C.PAD_LR-C.DIST, game.getCross().get(0, line_n).getY()-C.DIST);
+        if(line==COLUMN) setPosition(game.getCross().get(line_n, 0).getX()-C.DIST, C.PAD_DOWN-C.DIST);
+    }
+
+    public void setTheme(int theme) {
+        Color color;
+        switch(theme) {
+            case C.LIGHT: color = C.BLACK; break;
+            case C.DARK: color = C.WHITE; break;
+            default: color = C.BLACK; break;
+        }
+        setColor(color);
     }
 
     public void show() {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.duast.game.utils.Assets;
 
 /**
  * Created by alex on 10/21/16.
@@ -16,8 +17,7 @@ public class MyActor extends Actor {
     private NinePatchDrawable npd;
 
     public MyActor() {
-        Texture texture = new Texture("rect.png");
-        NinePatch np = new NinePatch(texture, 24, 24, 24, 24);
+        NinePatch np = new NinePatch(Assets.TEXTURE_SQUARE, 4, 4, 4, 4);
         npd = new NinePatchDrawable(np);
     }
 

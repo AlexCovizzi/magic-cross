@@ -2,6 +2,7 @@ package com.duast.game.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.duast.game.screens.GameScreen;
 import com.duast.game.stages.GameStage;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
@@ -11,16 +12,15 @@ import com.duast.game.utils.Coordinates;
  */
 
 public class GameInputListener extends InputListener {
-
-    private GameStage game;
+    private GameScreen screen;
     private float x0, y0;
     private Coordinates t_coords; //touch coordinates
     private int line, coord;
+    private boolean isTouchValid = false;
 
-    public GameInputListener(GameStage game) {
-        this.game = game;
+    public GameInputListener(GameScreen screen) {
+        this.screen = screen;
         t_coords = new Coordinates();
-
     }
 
     @Override
@@ -30,54 +30,71 @@ public class GameInputListener extends InputListener {
         this.y0 = y;
 
         //transform touch position in coordinates
-        t_coords.setX((int) ((x0-C.PAD_LR-(game.getNumSquaresInSector()*3-1)*C.DIST)/(int) game.getSquares().getSquareSize()));
-        t_coords.setY((int) ((y0-C.PAD_DOWN-(game.getNumSquaresInSector()*3-1)*C.DIST)/(int) game.getSquares().getSquareSize()));
+        int square_size = screen.getGameStage().getCross().getSquareSize()+C.DIST;
+        t_coords.setX((int) ((x0- C.PAD_LR)/square_size));
+        t_coords.setY((int) ((y0-C.PAD_DOWN)/square_size));
+
+        int ss = screen.getGameStage().getCross().size()/3;
+        if(t_coords.x>=ss && t_coords.x<=ss*2-1 && t_coords.y>=0 && t_coords.y<=ss*3-1) isTouchValid = true;
+        if(t_coords.y>=ss && t_coords.y<=ss*2-1 && t_coords.x>=0 && t_coords.x<=ss*3-1) isTouchValid = true;
 
         line = -1;
 
-        game.getHighlights().show(C.ROW_COLUMN);
-        game.getHighlights().setCoords(t_coords);
+        if(isTouchValid) {
+            screen.getGameStage().getHighlights().show(C.ROW_COLUMN);
+            screen.getGameStage().getHighlights().setCoords(t_coords);
 
+            screen.getUiStage().getTimer().start();
+        }
         return true;
     }
 
     @Override
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        //calculate drag distance
-        float dx = x-x0;
-        float dy = y-y0;
+        if(isTouchValid) {
+            //calculate drag distance
+            float dx = x - x0;
+            float dy = y - y0;
 
-        if(line== C.ROW) dy = 0;
-        else if(line==C.COLUMN) dx = 0;
+            if (line == C.ROW) dy = 0;
+            else if (line == C.COLUMN) dx = 0;
 
-        int dir = 0; //direction (+1 is UP or RIGHT; -1 is DOWN or LEFT; 0 is don't move)
+            int dir = 0; //direction (+1 is UP or RIGHT; -1 is DOWN or LEFT; 0 is don't move)
 
-        if(Math.abs(dx) > game.getSquares().getSquareSize()/1.5f) {
-            dir = (int) Math.signum(dx);
-            this.x0=x; //set new starting x
-            if(line==-1) {
-                line = C.ROW;
-                coord = t_coords.y;
-                game.getHighlights().hide(C.COLUMN);
+            int square_size = screen.getGameStage().getCross().getSquareSize();
+            int sector_size = screen.getGameStage().getCross().size() / 3;
+
+            if (Math.abs(dx) > square_size / 1.8f) {
+                dir = (int) Math.signum(dx);
+                this.x0 = x; //set new starting x
+                if (line == -1) {
+                    line = C.ROW;
+                    coord = t_coords.y;
+                    screen.getGameStage().getHighlights().hide(C.COLUMN);
+                }
+            }
+
+            if (Math.abs(dy) > square_size / 1.8f) {
+                dir = (int) Math.signum(dy);
+                this.y0 = y; //set new starting y
+                if (line == -1) {
+                    line = C.COLUMN;
+                    coord = t_coords.x;
+                    screen.getGameStage().getHighlights().hide(C.ROW);
+                }
+            }
+
+            if (coord > sector_size - 1 && coord < sector_size * 2 && dir != 0) {
+                screen.getGameStage().getCross().move(coord, dir, line);
             }
         }
-
-        if(Math.abs(dy) > game.getSquares().getSquareSize()/1.5f) {
-            dir = (int) Math.signum(dy);
-            this.y0=y; //set new starting y
-            if(line==-1) {
-                line = C.COLUMN;
-                coord = t_coords.x;
-                game.getHighlights().hide(C.ROW);
-            }
-        }
-
-        if(coord>game.getNumSquaresInSector()-1 && coord<game.getNumSquaresInSector()*2 && dir!=0) game.getSquares().move(coord, dir, line);
-
     }
 
     @Override
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        game.getHighlights().hide(C.ROW_COLUMN);
+        if(isTouchValid) {
+            screen.getGameStage().getHighlights().hide(C.ROW_COLUMN);
+            isTouchValid = false;
+        }
     }
 }
