@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.duast.game.screens.GameScreen;
 import com.duast.game.stages.GameStage;
+import com.duast.game.ui.WinDialog;
 import com.duast.game.utils.C;
 import com.duast.game.utils.Coordinates;
 
@@ -25,6 +26,7 @@ public class GameInputListener extends InputListener {
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+        if(!screen.isTouchable()) return false;
         //set starting position
         this.x0 = x;
         this.y0 = y;
@@ -95,6 +97,10 @@ public class GameInputListener extends InputListener {
         if(isTouchValid) {
             screen.getGameStage().getHighlights().hide(C.ROW_COLUMN);
             isTouchValid = false;
+        }
+        if(screen.getGameStage().getCross().checkWin()) {
+            screen.setTouchable(false);
+            screen.getUiStage().addActor(new WinDialog(screen));
         }
     }
 }

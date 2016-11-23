@@ -2,8 +2,10 @@ package com.duast.game.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,15 +20,16 @@ import com.duast.game.utils.C;
  */
 
 public class DifficultySelectBox extends Table {
-    public static final int LIST_WIDTH = Assets.FONT_SIZE*5;
+    public static final int LIST_WIDTH = Assets.FONT_SIZE*6;
     private static final String[] DIFFICULTIES = {"Easy", "Medium", "Hard"};
-    private TextButton title, easy, medium, hard;
+    private MyTextButton title;
+    private TextButton easy, medium, hard;
     private Table list;
     private int selected;
 
     public DifficultySelectBox(TextButton.TextButtonStyle tbStyle, int diff) {
-        title = new TextButton(DIFFICULTIES[diff], tbStyle);
-        title.getLabel().setAlignment(Align.left);
+        title = new MyTextButton(DIFFICULTIES[diff], tbStyle);
+        //title.getLabel().setAlignment(Align.left);
         selected = diff;
         title.pad(UIStage.PAD/3);
         title.addListener(new ClickListener() {
@@ -92,7 +95,7 @@ public class DifficultySelectBox extends Table {
     }
 
     /* getters */
-    public TextButton getTitleLabel() {
+    public MyTextButton getTitleLabel() {
         return title;
     }
 

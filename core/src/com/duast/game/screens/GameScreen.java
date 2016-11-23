@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Json;
 import com.duast.game.cameras.GameCamera;
 import com.duast.game.stages.GameStage;
 import com.duast.game.stages.UIStage;
+import com.duast.game.ui.StartingDialog;
 import com.duast.game.utils.Assets;
 import com.duast.game.utils.C;
 
@@ -21,17 +22,20 @@ public class GameScreen implements Screen {
 
     private int theme;
     private Color background;
+    private boolean touchable = true;
     private GameStage gameStage;
     private UIStage uiStage;
 
     public GameScreen() {
-        if(!Assets.SAVE_FILE.exists()) {
-            //showNewGameDialog();
-        }
         theme = Assets.SAVE_FILE.getTheme();
         gameStage = new GameStage(this);
         uiStage = new UIStage(this);
         setTheme(Assets.SAVE_FILE.getTheme());
+
+        if(!Assets.SAVE_FILE.exists()) {
+            setTouchable(false);
+            uiStage.addActor(new StartingDialog(this));
+        }
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(uiStage);
@@ -101,6 +105,14 @@ public class GameScreen implements Screen {
             default: background = C.WHITE;
         }
         gameStage.getHighlights().setTheme(theme);
+    }
+
+    public void setTouchable(boolean touchable) {
+        this.touchable = touchable;
+    }
+
+    public boolean isTouchable() {
+        return touchable;
     }
 
     /* getters */

@@ -21,6 +21,7 @@ public class C {
     public static final Color GRAY = new Color(0.5f, 0.5f, 0.5f, 0.8f);
     public static final Color LIGHT_GRAY = new Color(0.5f, 0.5f, 0.5f, 0.7f);
     public static final Color BLACK = new Color(0x0C090Aff);
+    public static final Color TRANSPARENT_BLACK = new Color(0x0C090Ad0);
     public static final Color RED = new Color(0xf44336ff);
     public static final Color GREEN = new Color(0x4caf50ff);
     public static final Color BLUE = new Color(0x2196f3ff);

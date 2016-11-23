@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -116,6 +117,16 @@ public class UIStage extends Stage {
     public void act(float delta) {
         super.act(delta);
         camera.update();
+
+        if(!screen.isTouchable()) {
+            menu.setTouchable(Touchable.disabled);
+            diff.setTouchable(Touchable.disabled);
+            new_game.setTouchable(Touchable.disabled);
+        }else{
+            menu.setTouchable(Touchable.enabled);
+            diff.setTouchable(Touchable.enabled);
+            new_game.setTouchable(Touchable.enabled);
+        }
     }
 
     @Override
@@ -130,5 +141,9 @@ public class UIStage extends Stage {
 
     public TimeLabel getTimer() {
         return timer;
+    }
+
+    public DifficultySelectBox getDiff() {
+        return diff;
     }
 }

@@ -1,10 +1,9 @@
 package com.duast.game.stages;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.duast.game.actors.Cross;
 import com.duast.game.actors.Highlights;
@@ -23,6 +22,7 @@ public class GameStage extends Stage {
     private GameCamera camera;
     private Cross cross;
     private Highlights highlights;
+    private Label starting_game_label;
     private int diff;
 
     public GameStage(GameScreen screen) {
@@ -46,18 +46,18 @@ public class GameStage extends Stage {
         highlights.setTheme(screen.getTheme());
         if(arr == null) {
             cross.init(diff);
-            //cross.shuffle();
+            if(Assets.SAVE_FILE.exists()) cross.shuffle();
         }else{
             cross.init(arr);
         }
 
         String text;
-        if(arr != null) text = "Resumed last game";
+        if (arr != null) text = "Resumed last game";
         else text = "Started new game";
-        Label label = new Label(text, new Label.LabelStyle(Assets.FONT_SMALL, C.GRAY));
-        label.setPosition(C.WIDTH/2 - label.getWidth()/2, C.PAD_DOWN + (cross.getSquareSize()+C.DIST)*cross.size() + C.PAD_LR*4);
-        addActor(label);
-        label.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1f, 0.75f), Actions.delay(2f), Actions.alpha(0, 0.75f)));
+        starting_game_label = new Label(text, new Label.LabelStyle(Assets.FONT_SMALL, C.GRAY));
+        starting_game_label.setPosition(C.WIDTH / 2 - starting_game_label.getWidth() / 2, C.PAD_DOWN + (cross.getSquareSize() + C.DIST) * cross.size() + C.PAD_LR * 4);
+        addActor(starting_game_label);
+        starting_game_label.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1f, 0.75f), Actions.delay(2f), Actions.alpha(0, 0.75f)));
 
         GameInputListener listener = new GameInputListener(screen); addListener(listener);
     }
@@ -67,6 +67,7 @@ public class GameStage extends Stage {
         super.act();
 
         camera.update();
+
     }
 
     @Override

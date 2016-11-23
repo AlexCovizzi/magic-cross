@@ -49,7 +49,6 @@ public class SaveFile {
     }
 
     public int[][] getCross() {
-        Gdx.app.log("log", values[Fields.CROSS.ordinal()]);
         if(values != null ) {
             if(!values[Fields.CROSS.ordinal()].equals("null")) {
                 int[][] arr;
